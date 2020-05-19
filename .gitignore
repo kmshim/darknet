@@ -4,6 +4,8 @@
 *.csv
 *.out
 *.png
+*.mp4
+*.jpg
 *.so
 *.exe
 *.dll
@@ -44,6 +46,15 @@ Thumbs.db
 # IDE generated #
 .vs/
 .vscode/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.dir
+*.pdb
+build/x64
+build/Debug
+out/
 
 # Managed by CMake
 src/version.h
