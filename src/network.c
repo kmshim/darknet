@@ -726,20 +726,52 @@ float *network_predict(network net, float *input)
     return out;
 }
 
-int num_detections(network *net, float thresh)
+int num_detections(network* net, float thresh)
 {
     int i;
     int s = 0;
     for (i = 0; i < net->n; ++i) {
         layer l = net->layers[i];
-        if (l.type == YOLO) {
-            s += yolo_num_detections(l, thresh);
-        }
-        if (l.type == GAUSSIAN_YOLO) {
-            s += gaussian_yolo_num_detections(l, thresh);
-        }
-        if (l.type == DETECTION || l.type == REGION) {
-            s += l.w*l.h*l.n;
+
+        switch (l.type) {
+        case CONVOLUTIONAL:
+        case DECONVOLUTIONAL:
+        case CONNECTED:
+        case MAXPOOL:
+        case LOCAL_AVGPOOL:
+        case SOFTMAX:
+        case DROPOUT:
+        case CROP:
+        case ROUTE:
+        case COST:
+        case NORMALIZATION:
+        case AVGPOOL:
+        case LOCAL:
+        case SHORTCUT:
+        case SCALE_CHANNELS:
+        case SAM:
+        case ACTIVE:
+        case RNN:
+        case GRU:
+        case LSTM:
+        case CONV_LSTM:
+        case CRNN:
+        case BATCHNORM:
+        case NETWORK:
+        case XNOR: break;
+        case DETECTION:
+        case REGION: s += l.w * l.h * l.n; break;
+        case YOLO: s += yolo_num_detections(l, thresh); break;
+        case GAUSSIAN_YOLO: s += gaussian_yolo_num_detections(l, thresh); break;
+        case ISEG:
+        case REORG:
+        case REORG_OLD:
+        case UPSAMPLE:
+        case LOGXENT:
+        case L2NORM:
+        case EMPTY:
+        case BLANK:
+        default: break;
         }
     }
     return s;
